@@ -1,105 +1,119 @@
 import mongoose from "mongoose";
+import { Document, Schema } from "mongoose";
 
 export interface IEnv {
   DB_URI: string;
   DB_PASSWORD: string;
 }
 
-export interface TeacherInterface {
-  teacherId: string;
+export interface UserInterface extends Document {
+  userId: string;
   name: string;
   email: string;
+  role: "admin" | "teacher" | "student" | "parent";
+  password?: string;
   photo?: string;
   phone?: string;
-  subjects: mongoose.Types.ObjectId[];
-  classes: mongoose.Types.ObjectId[];
+  subjects?: Schema.Types.ObjectId[];
+  classes?: Schema.Types.ObjectId[];
+  grade?: number;
   address?: string;
+  parents?: Schema.Types.ObjectId[];
+  students?: Schema.Types.ObjectId[];
+  teacherId?: string;
 }
 
-export interface StudentInterface {
-  studentId: string;
+// export interface TeacherInterface {
+//   teacherId: string;
+//   name: string;
+//   email: string;
+//   photo?: string;
+//   phone?: string;
+//   subjects: mongoose.Types.ObjectId[];
+//   classes: mongoose.Types.ObjectId[];
+//   address?: string;
+// }
+
+// export interface StudentInterface {
+//   studentId: string;
+//   name: string;
+//   email: string;
+//   photo?: string;
+//   phone?: string;
+//   grade: number;
+//   class: mongoose.Types.ObjectId;
+//   address: string;
+//   parent: mongoose.Types.ObjectId;
+// }
+
+// export interface ParentInterface {
+//   name: string;
+//   email: string;
+//   phone?: string;
+//   address?: string;
+// }
+
+export interface SubjectInterface extends Document {
   name: string;
-  email: string;
-  photo?: string;
-  phone?: string;
-  grade: number;
-  class: mongoose.Types.ObjectId;
-  address: string;
-  parent: mongoose.Types.ObjectId;
+  teachers: Schema.Types.ObjectId[];
 }
 
-export interface ParentInterface {
-  name: string;
-  email: string;
-  phone?: string;
-  address?: string;
-}
-
-export interface SubjectInterface {
-  name: string;
-  teachers: mongoose.Types.ObjectId[];
-}
-
-export interface ClassInterface {
+export interface ClassInterface extends Document {
   name: string;
   capacity: number;
   grade: number;
   supervisor: string;
-  teachers: mongoose.Types.ObjectId[];
+  teachers: Schema.Types.ObjectId[];
+  students: Schema.Types.ObjectId[];
 }
 
-export interface LessonInterface {
-  subject: string;
-  class: mongoose.Types.ObjectId;
-  teacher: mongoose.Types.ObjectId;
-  date?: Date;
-  startTime?: string;
-  endTime?: string;
+export interface LessonInterface extends Document {
+  subject: Schema.Types.ObjectId;
+  class: Schema.Types.ObjectId;
+  teacher: Schema.Types.ObjectId;
 }
 
-export interface ExamInterface {
-  subject: string;
-  class: mongoose.Types.ObjectId;
-  teacher: mongoose.Types.ObjectId;
+export interface ExamInterface extends Document {
+  subject: Schema.Types.ObjectId;
+  class: Schema.Types.ObjectId;
+  teacher: Schema.Types.ObjectId;
   date: Date;
 }
 
-export interface AssignmentInterface {
-  subject: string;
-  class: mongoose.Types.ObjectId;
-  teacher: mongoose.Types.ObjectId;
+export interface AssignmentInterface extends Document {
+  subject: Schema.Types.ObjectId;
+  class: Schema.Types.ObjectId;
+  teacher: Schema.Types.ObjectId;
   dueDate: Date;
-  description?: string;
 }
 
-export interface ResultInterface {
-  subject: string;
-  class: mongoose.Types.ObjectId;
-  teacher: mongoose.Types.ObjectId;
-  student: mongoose.Types.ObjectId;
+export interface ResultInterface extends Document {
+  subject: Schema.Types.ObjectId;
+  class: Schema.Types.ObjectId;
+  teacher: Schema.Types.ObjectId;
+  student: Schema.Types.ObjectId;
   date: Date;
   type: string;
   score: number;
 }
 
-export interface EventInterface {
+export interface EventInterface extends Document {
   title: string;
-  class: mongoose.Types.ObjectId;
+  class: Schema.Types.ObjectId;
   date: Date;
   startTime: string;
   endTime: string;
 }
 
-export interface AnnouncementInterface {
+export interface AnnouncementInterface extends Document {
   title: string;
-  class: mongoose.Types.ObjectId;
+  class: Schema.Types.ObjectId;
   date: Date;
-  message?: string;
 }
 
-export interface CalendarEventInterface {
+export interface CalendarEventInterface extends Document {
   title: string;
-  allDay: boolean;
+  allDay?: boolean;
   start: Date;
   end: Date;
 }
