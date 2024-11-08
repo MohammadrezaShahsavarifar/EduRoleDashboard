@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema, Model } from "mongoose";
+import { Request, Response, NextFunction } from "express";
 
 export interface IEnv {
   DB_URI: string;
@@ -22,36 +22,6 @@ export interface UserInterface extends Document {
   students?: Schema.Types.ObjectId[];
   teacherId?: string;
 }
-
-// export interface TeacherInterface {
-//   teacherId: string;
-//   name: string;
-//   email: string;
-//   photo?: string;
-//   phone?: string;
-//   subjects: mongoose.Types.ObjectId[];
-//   classes: mongoose.Types.ObjectId[];
-//   address?: string;
-// }
-
-// export interface StudentInterface {
-//   studentId: string;
-//   name: string;
-//   email: string;
-//   photo?: string;
-//   phone?: string;
-//   grade: number;
-//   class: mongoose.Types.ObjectId;
-//   address: string;
-//   parent: mongoose.Types.ObjectId;
-// }
-
-// export interface ParentInterface {
-//   name: string;
-//   email: string;
-//   phone?: string;
-//   address?: string;
-// }
 
 export interface SubjectInterface extends Document {
   name: string;
@@ -117,3 +87,40 @@ export interface CalendarEventInterface extends Document {
   start: Date;
   end: Date;
 }
+
+export type AsyncFunction = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => Promise<void>;
+
+export type CatchAsyncFunction = (
+  fn: AsyncFunction
+) => (req: Request, res: Response, next: NextFunction) => Promise<void>;
+
+export interface AppErrorInterface extends Error {
+  statusCode: number;
+  status: string;
+  isOperational: boolean;
+}
+
+export interface QueryString {
+  page?: string;
+  sort?: string;
+  limit?: string;
+  fields?: string;
+  [key: string]: any;
+}
+
+export interface APIFeaturesInterface {
+  query: any;
+  queryString: QueryString;
+}
+
+export type ModelType = Model<DocumentType>;
+export type DocumentType = Document & { [key: string]: any };
+export type HandlerFunction = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => Promise<void>;
