@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { CalendarEventInterface } from "../types";
 
-const calendarEventSchema = new mongoose.Schema<CalendarEventInterface>({
+const calendarEventSchema = new Schema<CalendarEventInterface>({
   title: {
     type: String,
     required: [true, "Event must have a title"],
@@ -20,6 +20,9 @@ const calendarEventSchema = new mongoose.Schema<CalendarEventInterface>({
   },
 });
 
-const CalendarEvent = mongoose.model("CalendarEvent", calendarEventSchema);
+const CalendarEvent = mongoose.model<CalendarEventInterface>(
+  "CalendarEvent",
+  calendarEventSchema
+);
 
 export default CalendarEvent;

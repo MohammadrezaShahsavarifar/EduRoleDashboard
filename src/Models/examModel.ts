@@ -1,27 +1,28 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import { ExamInterface } from "../types";
 
 const examSchema = new mongoose.Schema<ExamInterface>({
   subject: {
-    type: String,
-    required: [true, "Exam must have a subject"],
+    type: Schema.Types.ObjectId,
+    ref: "Subject",
+    required: true,
   },
   class: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Class",
-    required: [true, "Exam must have a class"],
+    required: true,
   },
   teacher: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Teacher",
-    required: [true, "Exam must have a teacher"],
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
   date: {
     type: Date,
-    required: [true, "Exam must have a date"],
+    required: true,
   },
 });
 
-const Exam = mongoose.model("Exam", examSchema);
+const Exam = mongoose.model<ExamInterface>("Exam", examSchema);
 
 export default Exam;

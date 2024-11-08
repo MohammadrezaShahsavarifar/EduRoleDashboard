@@ -1,29 +1,30 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import { EventInterface } from "../types";
 
 const eventSchema = new mongoose.Schema<EventInterface>({
   title: {
     type: String,
-    required: [true, "Event must have a title"],
+    required: true,
   },
   class: {
-    type: String,
-    required: [true, "Event must have a class"],
+    type: Schema.Types.ObjectId,
+    ref: "Class",
+    required: true,
   },
   date: {
     type: Date,
-    required: [true, "Event must have a date"],
+    required: true,
   },
   startTime: {
     type: String,
-    required: [true, "Event must have a start time"],
+    required: true,
   },
   endTime: {
     type: String,
-    required: [true, "Event must have an end time"],
+    required: true,
   },
 });
 
-const Event = mongoose.model("Event", eventSchema);
+const Event = mongoose.model<EventInterface>("Event", eventSchema);
 
 export default Event;

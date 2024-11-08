@@ -1,26 +1,25 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
+
 import { LessonInterface } from "../types";
 
 const lessonSchema = new mongoose.Schema<LessonInterface>({
   subject: {
-    type: String,
-    required: [true, "Lesson must have a subject"],
+    type: Schema.Types.ObjectId,
+    ref: "Subject",
+    required: true,
   },
   class: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Class",
-    required: [true, "Lesson must have a class"],
+    required: true,
   },
   teacher: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Teacher",
-    required: [true, "Lesson must have a teacher"],
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
-  date: Date,
-  startTime: String,
-  endTime: String,
 });
 
-const Lesson = mongoose.model("Lesson", lessonSchema);
+const Lesson = mongoose.model<LessonInterface>("Lesson", lessonSchema);
 
 export default Lesson;

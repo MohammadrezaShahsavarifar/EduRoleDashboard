@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import Teacher from "./teacherModel";
+import mongoose, { Schema, Document } from "mongoose";
+
 import { ClassInterface } from "../types";
 
 const classSchema = new mongoose.Schema<ClassInterface>({
@@ -20,9 +20,20 @@ const classSchema = new mongoose.Schema<ClassInterface>({
     type: String,
     required: [true, "Class must have a supervisor"],
   },
-  teachers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Teacher" }],
+  teachers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User", // ارتباط با مدل User با نقش Teacher
+    },
+  ],
+  students: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User", // ارتباط با مدل User با نقش Student
+    },
+  ],
 });
 
-const Class = mongoose.model("Class", classSchema);
+const Class = mongoose.model<ClassInterface>("Class", classSchema);
 
 export default Class;

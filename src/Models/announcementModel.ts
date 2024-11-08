@@ -1,23 +1,25 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import { AnnouncementInterface } from "../types";
+
 const announcementSchema = new mongoose.Schema<AnnouncementInterface>({
   title: {
     type: String,
-    required: [true, "Announcement must have a title"],
+    required: true,
   },
   class: {
-    type: String,
-    required: [true, "Announcement must have a class"],
+    type: Schema.Types.ObjectId,
+    ref: "Class",
+    required: true,
   },
   date: {
     type: Date,
-    required: [true, "Announcement must have a date"],
-  },
-  message: {
-    type: String,
+    required: true,
   },
 });
 
-const Announcement = mongoose.model("Announcement", announcementSchema);
+const Announcement = mongoose.model<AnnouncementInterface>(
+  "Announcement",
+  announcementSchema
+);
 
 export default Announcement;

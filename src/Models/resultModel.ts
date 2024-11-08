@@ -1,38 +1,41 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import { ResultInterface } from "../types";
 
 const resultSchema = new mongoose.Schema<ResultInterface>({
   subject: {
-    type: String,
-    required: [true, "Result must have a subject"],
+    type: Schema.Types.ObjectId,
+    ref: "Subject",
+    required: true,
   },
   class: {
-    type: String,
-    required: [true, "Result must have a class"],
+    type: Schema.Types.ObjectId,
+    ref: "Class",
+    required: true,
   },
   teacher: {
-    type: String,
-    required: [true, "Result must have a teacher"],
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
   student: {
-    type: String,
-    required: [true, "Result must have a student"],
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
   date: {
     type: Date,
-    required: [true, "Result must have a date"],
+    required: true,
   },
   type: {
     type: String,
-    enum: ["exam", "assignment", "quiz"], // Define allowed types
-    required: [true, "Result must have a type"],
+    required: true,
   },
   score: {
     type: Number,
-    required: [true, "Result must have a score"],
+    required: true,
   },
 });
 
-const Result = mongoose.model("Result", resultSchema);
+const Result = mongoose.model<ResultInterface>("Result", resultSchema);
 
 export default Result;
