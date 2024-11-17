@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 //endpoints
-app.use("/api/v1");
+// app.use("/api/v1");
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

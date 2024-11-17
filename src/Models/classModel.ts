@@ -1,39 +1,61 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-import { ClassInterface } from "../types";
-
-const classSchema = new mongoose.Schema<ClassInterface>({
+const classSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+    unique: true,
+    required: true,
+    autoIncrement: true,
+  },
   name: {
     type: String,
-    required: [true, "Class must have a name"],
     unique: true,
+    required: true,
   },
   capacity: {
     type: Number,
-    required: [true, "Class must have a capacity"],
+    required: true,
   },
-  grade: {
-    type: Number,
-    required: [true, "Class must have a grade"],
+  supervisorId: {
+    type: String,
   },
   supervisor: {
-    type: String,
-    required: [true, "Class must have a supervisor"],
+    type: Schema.Types.ObjectId,
+    ref: "Teacher",
   },
-  teachers: [
+  lessons: [
     {
       type: Schema.Types.ObjectId,
-      ref: "User", // ارتباط با مدل User با نقش Teacher
+      ref: "Lesson",
     },
   ],
   students: [
     {
       type: Schema.Types.ObjectId,
-      ref: "User", // ارتباط با مدل User با نقش Student
+      ref: "Student",
+    },
+  ],
+  gradeId: {
+    type: Number,
+    required: true,
+  },
+  grade: {
+    type: Schema.Types.ObjectId,
+    ref: "Grade",
+  },
+  events: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Event",
+    },
+  ],
+  announcements: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Announcement",
     },
   ],
 });
 
-const Class = mongoose.model<ClassInterface>("Class", classSchema);
-
+const Class = mongoose.model("Class", classSchema);
 export default Class;

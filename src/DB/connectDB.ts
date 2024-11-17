@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { IEnv } from "../types";
 
 dotenv.config({ path: "../../config.env" });
 
-const env: IEnv = process.env as any;
+const env = process.env as any;
 
 // Construct the DB_URI dynamically
 const dbUri = env.DB_URI.replace("DB_PASSWORD", env.DB_PASSWORD);

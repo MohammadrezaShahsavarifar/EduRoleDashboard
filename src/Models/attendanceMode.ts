@@ -1,23 +1,27 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-const examSchema = new mongoose.Schema({
+const attendanceSchema = new mongoose.Schema({
   id: {
     type: Number,
     unique: true,
     required: true,
     autoIncrement: true,
   },
-  title: {
+  date: {
+    type: Date,
+    required: true,
+  },
+  present: {
+    type: Boolean,
+    required: true,
+  },
+  studentId: {
     type: String,
     required: true,
   },
-  startDate: {
-    type: Date,
-    required: true,
-  },
-  endDate: {
-    type: Date,
-    required: true,
+  student: {
+    type: Schema.Types.ObjectId,
+    ref: "Student",
   },
   lessonId: {
     type: Number,
@@ -27,13 +31,7 @@ const examSchema = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: "Lesson",
   },
-  results: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Result",
-    },
-  ],
 });
 
-const Exam = mongoose.model("Exam", examSchema);
-export default Exam;
+const Attendance = mongoose.model("Attendance", attendanceSchema);
+export default Attendance;

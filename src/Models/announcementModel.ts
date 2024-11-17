@@ -1,25 +1,31 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { AnnouncementInterface } from "../types";
 
-const announcementSchema = new mongoose.Schema<AnnouncementInterface>({
+const announcementSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+    unique: true,
+    required: true,
+    autoIncrement: true,
+  },
   title: {
     type: String,
     required: true,
   },
-  class: {
-    type: Schema.Types.ObjectId,
-    ref: "Class",
-    required: true,
+  description: {
+    type: String,
   },
   date: {
     type: Date,
     required: true,
   },
+  classId: {
+    type: Number,
+  },
+  class: {
+    type: Schema.Types.ObjectId,
+    ref: "Class",
+  },
 });
 
-const Announcement = mongoose.model<AnnouncementInterface>(
-  "Announcement",
-  announcementSchema
-);
-
+const Announcement = mongoose.model("Announcement", announcementSchema);
 export default Announcement;

@@ -1,30 +1,30 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-const subjectSchema = new mongoose.Schema({
+const gradeSchema = new mongoose.Schema({
   id: {
     type: Number,
     unique: true,
     required: true,
     autoIncrement: true,
   },
-  name: {
-    type: String,
+  level: {
+    type: Number,
     unique: true,
     required: true,
   },
-  teachers: [
+  students: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Teacher",
+      ref: "Student",
     },
   ],
-  lessons: [
+  classes: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Lesson",
+      ref: "Class",
     },
   ],
 });
 
-const Subject = mongoose.model("Subject", subjectSchema);
-export default Subject;
+const Grade = mongoose.model("Grade", gradeSchema);
+export default Grade;

@@ -1,41 +1,39 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { ResultInterface } from "../types";
 
-const resultSchema = new mongoose.Schema<ResultInterface>({
-  subject: {
-    type: Schema.Types.ObjectId,
-    ref: "Subject",
+const resultSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+    unique: true,
     required: true,
-  },
-  class: {
-    type: Schema.Types.ObjectId,
-    ref: "Class",
-    required: true,
-  },
-  teacher: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  student: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true,
+    autoIncrement: true,
   },
   score: {
     type: Number,
     required: true,
   },
+  examId: {
+    type: Number,
+  },
+  exam: {
+    type: Schema.Types.ObjectId,
+    ref: "Exam",
+  },
+  assignmentId: {
+    type: Number,
+  },
+  assignment: {
+    type: Schema.Types.ObjectId,
+    ref: "Assignment",
+  },
+  studentId: {
+    type: String,
+    required: true,
+  },
+  student: {
+    type: Schema.Types.ObjectId,
+    ref: "Student",
+  },
 });
 
-const Result = mongoose.model<ResultInterface>("Result", resultSchema);
-
+const Result = mongoose.model("Result", resultSchema);
 export default Result;

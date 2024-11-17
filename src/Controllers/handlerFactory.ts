@@ -70,7 +70,8 @@ export const getOne = (Model: ModelType, popOptions?: any): HandlerFunction =>
 export const getAll = (Model: ModelType): HandlerFunction =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     let filter = {};
-    if (req.params.tourId) filter = { tour: req.params.tourId };
+    if (req.params.userId) filter = { user: req.params.userId };
+    if (req.params.userId) filter = { user: req.params.userId };
 
     const features = new APIFeatures(
       Model.find(filter),

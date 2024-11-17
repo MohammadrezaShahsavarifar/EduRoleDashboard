@@ -1,30 +1,35 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { EventInterface } from "../types";
 
-const eventSchema = new mongoose.Schema<EventInterface>({
+const eventSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+    unique: true,
+    required: true,
+    autoIncrement: true,
+  },
   title: {
     type: String,
     required: true,
   },
-  class: {
-    type: Schema.Types.ObjectId,
-    ref: "Class",
-    required: true,
+  description: {
+    type: String,
   },
-  date: {
+  startDate: {
     type: Date,
     required: true,
   },
-  startTime: {
-    type: String,
+  endDate: {
+    type: Date,
     required: true,
   },
-  endTime: {
-    type: String,
-    required: true,
+  classId: {
+    type: Number,
+  },
+  class: {
+    type: Schema.Types.ObjectId,
+    ref: "Class",
   },
 });
 
-const Event = mongoose.model<EventInterface>("Event", eventSchema);
-
+const Event = mongoose.model("Event", eventSchema);
 export default Event;
