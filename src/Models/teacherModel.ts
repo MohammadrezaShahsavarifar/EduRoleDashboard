@@ -1,14 +1,14 @@
 import mongoose, { Schema, Document } from "mongoose";
+import bcrypt from "bcryptjs";
 
 const teacherSchema = new mongoose.Schema({
-  id: {
+  username: {
     type: String,
     unique: true,
     required: true,
   },
-  username: {
+  password: {
     type: String,
-    unique: true,
     required: true,
   },
   name: {
@@ -70,6 +70,10 @@ const teacherSchema = new mongoose.Schema({
     required: true,
   },
 });
-
+teacherSchema.pre("save", async function (next) {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
 const Teacher = mongoose.model("Teacher", teacherSchema);
 export default Teacher;

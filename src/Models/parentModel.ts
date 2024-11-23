@@ -1,14 +1,14 @@
 import mongoose, { Schema, Document } from "mongoose";
+import bcrypt from "bcryptjs";
 
 const parentSchema = new mongoose.Schema({
-  id: {
+  username: {
     type: String,
     unique: true,
     required: true,
   },
-  username: {
+  password: {
     type: String,
-    unique: true,
     required: true,
   },
   name: {
@@ -43,6 +43,10 @@ const parentSchema = new mongoose.Schema({
     },
   ],
 });
-
+parentSchema.pre("save", async function (next) {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
 const Parent = mongoose.model("Parent", parentSchema);
 export default Parent;
