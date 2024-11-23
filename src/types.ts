@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 export interface AdminInterface extends Document {
   id: string;
   username: string;
+  password: string;
 }
 
 export interface StudentInterface extends Document {
@@ -162,17 +163,11 @@ export interface AppErrorInterface extends Error {
   isOperational: boolean;
 }
 
-export type ModelType = Model<Document>;
-
 export type HandlerFunction = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => Promise<void>;
-
-export interface QueryString {
-  [key: string]: string | undefined;
-}
 
 export type AsyncFunction = (
   req: Request,
