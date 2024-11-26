@@ -1,12 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 const subjectSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    unique: true,
-    required: true,
-    autoIncrement: true,
-  },
   name: {
     type: String,
     unique: true,

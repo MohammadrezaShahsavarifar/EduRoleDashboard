@@ -1,12 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 const resultSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    unique: true,
-    required: true,
-    autoIncrement: true,
-  },
   score: {
     type: Number,
     required: true,

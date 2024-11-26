@@ -1,12 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 const examSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    unique: true,
-    required: true,
-    autoIncrement: true,
-  },
+
   title: {
     type: String,
     required: true,

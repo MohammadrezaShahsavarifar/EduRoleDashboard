@@ -1,12 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 const attendanceSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    unique: true,
-    required: true,
-    autoIncrement: true,
-  },
   date: {
     type: Date,
     required: true,

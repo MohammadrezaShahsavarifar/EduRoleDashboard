@@ -1,12 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 const gradeSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    unique: true,
-    required: true,
-    autoIncrement: true,
-  },
+ 
   level: {
     type: Number,
     unique: true,
