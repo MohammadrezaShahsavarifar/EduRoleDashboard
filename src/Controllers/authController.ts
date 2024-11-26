@@ -1,11 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 import AppError from "../utiles/AppError";
 import User from "../Models/userModel";
-import Admin from "../Models/adminModel";
 import catchAsync from "../utiles/catchAsync";
+
+interface CustomRequest extends Request {
+  user?: any; // Adjust the type of user as needed, e.g., UserDocument
+}
 
 const signToken = (id: string) => {
   const secret = process.env.JWT_SECRET;
@@ -48,10 +52,7 @@ export const userSignUp = catchAsync(
     try {
       const user = await User.create(req.body);
       if (user) {
-        res.status(201).json({
-          status: "success",
-          message: "User created successfully",
-        });
+        createSendToken(user, 201, res);
       }
     } catch (error) {
       next(error);
@@ -80,9 +81,13 @@ export const login = catchAsync(
   }
 );
 
-interface CustomRequest extends Request {
-  user?: any;
-}
+export const logout = (req: Request, res: Response) => {
+  res.cookie("jwt", "loggedout", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: "success" });
+};
 
 export const protect = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -152,3 +157,84 @@ export const restrictTo = (...roles: string[]) => {
     next();
   };
 };
+
+export const forgotPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // 1) Get user based on POSTed email
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return next(new AppError("There is no user with email address.", 404));
+    }
+
+    // 2) Generate the random reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    user.passwordResetToken = hashedToken;
+    user.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      status: "success",
+      message: "Token generated!",
+      resetToken, // فقط برای اهداف تست نمایش داده شده است
+    });
+  }
+);
+
+export const resetPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // 1) Get user based on the token
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    // 2) If token has not expired, and there is user, set the new password
+    if (!user) {
+      return next(new AppError("Token is invalid or has expired", 400));
+    }
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+
+    // 3) Log the user in, send JWT
+    createSendToken(user, 200, res);
+  }
+);
+
+export const updatePassword = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    // 1) Get user from collection
+    const user = await User.findById(req.user.id).select("+password");
+
+    // Check if user is null
+    if (!user) {
+      return next(new AppError("User not found.", 404));
+    }
+
+    // 2) Check if POSTed current password is correct
+    if (!(await bcrypt.compare(req.body.passwordCurrent, user.password))) {
+      return next(new AppError("Your current password is wrong.", 401));
+    }
+
+    // 3) If so, update password
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    await user.save();
+
+    // 4) Log user in, send JWT
+    createSendToken(user, 200, res);
+  }
+);
